@@ -1,0 +1,429 @@
+﻿macro ;&**&;=>|(str,num)
+	a=0
+	strb=""
+	(a<=num)=>
+		strb=strb+str
+		a=a+1
+	return strb
+
+macro ;&>>&;=>|(a333,v333)
+	(a333<v333)=>
+		yield a333
+		a333=a333+1
+
+macro ;&++;=>|(ref index)
+	cf=index
+	index=index+1
+	return cf
+
+macro ;&+=&;=>|(ref ba,gi)
+	fjf=ba
+	ba=ba+gi
+	return fjf
+
+macro ;&--;=>|(ref index)
+	f=index
+	index=index-1
+	return f
+  
+macro ;&-=&;=>|(ref index,v)
+	index=index-v
+	return index
+
+
+
+
+class Main
+	lt={}
+	
+	def ()
+
+		fe=0
+		fe++
+	
+		lt=create LiquidTest(90,90,40,40)
+		lt.init()
+
+		(true)=>
+			draw()
+			paintInternal()
+
+	def draw() 
+
+
+		lt.my=getMouseY()
+		lt.mx=getMouseX()
+
+@ 		line(lt.mx,lt.my,lt.mx+1,lt.my+1,2.0)
+
+
+		lt.pressed=getMouseClicked()
+
+
+		lt.simulate()
+		lt.paint(0)
+		
+ 
+
+
+
+
+class LiquidTest
+	particles =[]
+	gsizeX=0
+	gsizeY=0
+	grid=[[]]
+	active=[]
+	water={}
+	soda={}
+	lava={}
+	pressed=false
+	pressedprev=false
+	mx=0.0
+	my=0.0
+	mxPrev=0
+	myPrev=0
+	def (gsizeX1,gsizeY1,particlesX1,particlesY1)
+		
+		this.active.add(create Node())
+		this.active.clear()
+		this.particlesX=particlesX1
+		this.particlesY=particlesY1
+		this.gsizeX=gsizeX1
+		this.gsizeY=gsizeY1
+		this.water=create Material(1,1.2,1.2,1.2,0,0)
+		this.soda=create Material(2.0,2.0,2.0,2.0,0,0)
+		this.lava=create Material(1.0,1.0,1.0,1.0,0,0)
+
+	def init()
+		this.grid=[]
+		[0>>gsizeX]=>|(i)
+			this.grid.add([])
+			[0>>gsizeY]=>|(j)
+				this.grid[i].add(create Node())
+		p={}
+		[0>>particlesX]=>|(i)
+			[0>>particlesY/3]=>|(j)
+				p=create Particle(this.water,i+4,j+4,0.0,0.0)
+				this.particles.add(p)
+
+		[0>>particlesX]=>|(i)
+			[0>>particlesY/3]=>|(j)
+				p=create Particle(this.water,i+4,j+4+(particlesY/3),0.0,0.0)
+				this.particles.add(p)
+		[0>>particlesX]=>|(i)
+			[0>>particlesY/3]=>|(j)
+				p=create Particle(this.water,i+4,j+4+((particlesY/3)*2),0.0,0.0)
+				this.particles.add(p)
+
+	def paint(wz)
+		this.particles=>|(p)
+			dmd=5.5
+			line((dmd*p.x)+wz,dmd*p.y,(dmd*(p.x-p.u))+wz,dmd*(p.y-p.v),p.mat.m)
+	
+	def simulate()
+		drag=false
+		mdx=0.0
+		mdy=0.0
+		if this.pressed==true && this.pressedprev==true
+			drag=true
+			mdx=0.25*(this.mx-this.mxPrev)
+			mdy=0.25*(this.my-this.myPrev)
+
+		this.pressedprev=this.pressed
+		this.mxPrev=this.mx
+		this.myPrev=this.my
+		
+		this.active=>|(n4) 
+			n4.clear()
+		x=0
+		y=0
+		phi=0
+		fx=0.0
+		fy=0.0
+
+		this.particles=>|(p)
+			p.cx=floatToInt(p.x-0.5)
+			p.cy=floatToInt(p.y-0.5)
+
+			x=p.cx-p.x
+			p.px[0]=((0.5*x*x)+(1.5*x)+1.125)
+			p.gx[0]=(x+1.5)
+			x+=1.0
+			p.px[1]=(((0-x)*x)+0.75)
+			p.gx[1]=((0-2.0)*x)
+			x+=1.0
+			p.px[2]=((0.5*x*x)+((0-1.5)*x)+1.125)
+			p.gx[2]=(x-1.5)
+
+			y=p.cy-p.y
+			p.py[0]=((0.5*y*y)+(1.5*y)+1.125)
+			p.gy[0]=(y+1.5)
+			y+=1.0
+			p.py[1]=(((0-y)*y)+0.75)
+			p.gy[1]=((0-2.0)*y)
+			y+=1.0
+			p.py[2]=((0.5*y*y)+((0-1.5)*y)+1.125)
+			p.gy[2]=(y-1.5)
+
+			[0>>3]=>|(i)
+				[0>>3]=>|(j)
+					nr=(this.grid[p.cx+i])[p.cy+j]
+					if nr.active==false
+						this.active.add(nr)
+						nr.active=true
+					phi=p.px[i]*p.py[j]
+					nr.m+=phi*p.mat.m
+					nr.d+=phi
+					nr.gx+=p.gx[i]*p.py[j]
+					nr.gy+=p.gx[i]*p.py[j]
+
+
+		density=0.0
+		pressure=0.0
+		weight=0.0
+		n01=0.0
+		n02=0.0
+		n11=0.0
+		n12=0.0
+		cx=0.0
+		cy=0.0
+		cxi=0.0
+		cyi=0.0
+
+		pdx=0.0
+		pdy=0.0
+		C20=0.0
+		C02=0.0
+		C30=0.0
+		C03=0.0
+		csum1=0.0
+		csum2=0.0
+		C21=0.0
+		C31=0.0
+		C12=0.0
+		C13=0.0
+		C11=0.0
+		u=0.0
+		u2=0.0
+		u3=0.0
+		v=0.0
+		v2=0.0
+		v3=0.0
+
+@		writeLine("Start")
+		this.particles=>|(p)
+			
+@			writeLine(p)
+			cx=floatToInt(p.x)
+			cy=floatToInt(p.y)
+			cxi=cx+1
+			cyi=cy+1
+			n01=(this.grid[cx])[cy]
+			n02=(this.grid[cx])[cyi]
+			n11=(this.grid[cxi])[cy]
+			n12=(this.grid[cxi])[cyi]
+			pdx=n11.d-n01.d
+			pdy=n02.d-n01.d
+			C20=((3.0*pdx)-n11.gx)+((0-2.0)*n01.gx)
+			C02=((3.0*pdy)-n02.gx)+((0-2.0)*n01.gy)
+			C30=((0-2.0)*pdx)+n11.gx+n01.gx
+			C03=((0-2.0)*pdy)+n02.gy+n01.gy
+			csum1=n01.d+n01.gy+C02+C03
+			csum2=n01.d+n01.gx+C20+C30
+			
+			C21 = (3.0 * n12.d) +(((0- 2.0) * n02.gx) - n12.gx) +(((0- 3.0) * csum1) - C20)
+            C31 = ((0-2.0) * n12.d) + n02.gx + n12.gx + ((2.0 * csum1) - C30)
+            C12 = (3.0 * n12.d) + (((0-2.0) * n11.gy) - n12.gy) +(((0- 3.0) * csum2) - C02)
+            C13 = ((0-2.0) * n12.d) + n11.gy + n12.gy + ((2.0 * csum2) - C03)
+            C11 = (((n02.gx - C13) - C12) - n01.gx)
+			
+			u=p.x-cx
+            u = p.x - cx
+            u2 = u * u
+            u3 = u * u2
+            v = p.y - cy
+            v2 = v * v
+            v3 = v * v2
+            density = n01.d + (n01.gx * u) + (n01.gy * v) + (C20 * u2) + (C02 * v2) + (C30 * u3) + (C03 * v3) + (C21 * u2 * v) + (C31 * u3 * v) + (C12 * u * v2) + (C13 * u * v3) + (C11 * u * v)
+			
+            pressure = density - 1.0
+            if pressure > 2.0
+                pressure = 2.0
+
+            fx = 0.0
+            fy = 0.0
+
+            if (p.x < 4.0)
+                fx += p.mat.m * (4.0 - p.x)
+
+            else 
+				if (p.x > this.gsizeX - 5)
+					fx += p.mat.m * ((this.gsizeX - 5) - p.x)
+
+            if (p.y < 4.0)
+                fy += p.mat.m * (4.0 - p.y)
+            else 
+				if (p.y > this.gsizeY - 5)
+					fy += p.mat.m * ((this.gsizeY - 5) - p.y)
+
+            if (drag)
+                vx = abs(p.x + ((0-0.25) * this.mx))
+                vy = abs(p.y + ((0-0.25) * this.my))
+                if ((vx < 10.0) && (vy < 10.0))
+                    weight = p.mat.m * (((1-vx) * 0.10)) * (((1-vy) * 0.10))
+                    fx += weight * (mdx - p.u)
+                    fy += weight * (mdy - p.v)
+
+			[0>>3]=>|(i)
+				[0>>3]=>|(j)
+
+					n=(this.grid[p.cx+i])[p.cy+j]
+					phi=p.px[i]*p.py[j]
+					
+					n.ax+=((0-((p.gx[i] * p.py[j]) * pressure))) + (fx * phi)
+					n.ay+=((0-((p.px[i] * p.gy[j]) * pressure))) + (fy * phi)
+					
+@					debug(n)
+@					debug((this.grid[p.cx+i])[p.cy+j])
+
+
+@		write(this.grid)
+@		read()
+@		writeLine(this.active.length(),"actives")
+
+		this.active=>|(nV)
+			if nV.m>0.0
+
+				nV.ax=nV.ax/nV.m
+				nV.ay=nV.ay/nV.m
+				nV.ay+=0.1
+
+
+		mu=0.0
+		mv=0.0
+@		writeLine(this.particles.length(),"particles")
+		this.particles=>|(p)
+			[0>>3]=>|(i)
+				[0>>3]=>|(j)
+					n=(this.grid[p.cx+i])[p.cy+j]
+					phi=p.px[i]*p.py[j]
+					p.u+=phi*n.ax
+					p.v+=phi*n.ay
+				
+            mu = p.mat.m * p.u
+            mv = p.mat.m * p.v
+			[0>>3]=>|(i)
+				[0>>3]=>|(j)
+					n=(this.grid[p.cx+i])[p.cy+j]
+					phi=p.px[i]*p.py[j]
+					n.u+=phi*mu
+					n.v+=phi*mv
+
+		this.active=>|(nRD)
+			if nRD.m>0.0
+				nRD.u=nRD.u/nRD.m
+				nRD.v=nRD.v/nRD.m
+
+@		write("SDF")
+		this.particles=>|(p)
+			gu=0.0
+			gv=0.0
+			[0>>3]=>|(i)
+				[0>>3]=>|(j)
+					n=(this.grid[p.cx+i])[p.cy+j]
+					phi=p.px[i]*p.py[j]
+					gu+=phi*n.u
+					gv+=phi*n.v
+
+@			debug(p)
+@			writeLine(gu,gv)
+
+			p.x += gu
+            p.y += gv
+            p.u += 1.0 * (gu - p.u)
+            p.v += 1.0 * (gv - p.v)
+
+@			writeLine(p.u,p.v)
+@			read()
+
+            if (p.x < 1.0)
+                p.x = (1.0 + (rand() * 0.71))
+                p.u = 0.0
+			else 
+				if (p.x > this.gsizeX - 2)
+	                p.x = ((this.gsizeX - 2) + ((0-rand()) * 0.71))
+		            p.u = 0.0
+        
+		    if (p.y < 1.0)
+                p.y = (1.0 + (rand() * 0.71))
+                p.v = 0.0
+            else 
+				if (p.y > this.gsizeY - 2)
+	                p.y = ((this.gsizeY - 2) + ((0-rand()) * 0.71))
+		            p.v = 0.0
+
+
+        
+
+class Node
+	m=0.0
+	d=0.0
+	gx=0.0
+	gy=0.0
+	u=0.0
+	v=0.0
+	ax=0.0
+	ay=0.0
+	active=false
+
+	def clear()
+		this.m=0.0
+		this.d=0.0
+		this.gx=0.0
+		this.gy=0.0
+		this.u=0.0
+		this.v=0.0
+		this.ax=0.0
+		this.ay=0.0
+		this.active=false
+
+class Particle
+	mat={}
+	x=0.0
+	y=0.0
+	u=0.0
+	v=0.0
+	dudx=0.0
+	dudy=0.0
+	dvdx=0.0
+	dvdy=0.0
+	cx=0
+	cy=0
+	px=[0,0,0]
+	py=[0,0,0]
+	gx=[0,0,0]
+	gy=[0,0,0]
+
+	def (mat1,x1,y1,u1,v1)
+		this.mat=mat1
+		this.x=x1
+		this.y=y1
+		this.u=u1
+		this.v=v1
+
+class Material
+	m=0.0
+	rd=0.0
+	k=0.0
+	v=0.0
+	d=0.0
+	g=0.0
+	def (m1,rd1,k1,v1,d1,g1)
+		this.m=m1
+		this.rd=rd1
+		this.k=k1
+		this.v=v1
+		this.d=d1
+		this.g=g1
+

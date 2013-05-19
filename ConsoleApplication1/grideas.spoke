@@ -1,0 +1,221 @@
+﻿macro ;&**&;=>|(str,num)
+	a=0
+	strb=""
+	(a<=num)=>
+		strb=strb+str
+		a=a+1
+	return strb
+
+macro ;& times &;=>|(val,num)
+	a=0
+	strb=[]
+	(a<=num)=>
+		strb.add(val)
+		a=a+1
+	return strb
+	
+macro ;clone &;=>|(rrb)
+	rrb=>|(a89)
+		yield (a89)
+
+macro ;&<&>;=>|(items,expressionc)
+	items=>|(_abb)
+		if expressionc(_abb)
+			return _abb
+	return null
+
+macro ;[&>>&];=>|(a333,v333)
+	(a333<=v333)=>
+		yield a333
+		a333=a333+1
+
+macro ;&{&};=>|(items1,expression)
+	items1=>|(_ff)
+		if expression(_ff)
+			yield return _ff
+
+macro ;&++;=>|(ref index)
+	f=index
+	index=index+1
+	return f-1
+
+macro ;&+=&;=>|(ref ba,gi)
+	fjf=ba
+	ba=ba+gi
+	return fjf
+
+macro ;&--;=>|(ref index)
+	f=index
+	index=index-1
+	return f+1
+	
+macro ;&-=&;=>|(ref index,v)
+	index=index-v
+	return index
+	 
+
+macro ;&?&:&;=>|(con,l1,l2)on
+	if con
+		return l1
+	else
+		return l2
+ 
+
+
+class Main
+
+	width  = 10
+	height = 10
+	grid = []
+
+	S=1
+	E=2
+
+	HORIZONTAL = 1
+	VERTICAL = 2
+	def writeJunk(in0,ret)
+		write(ret)
+		return ret
+
+ 	def ()
+		writeLine("Test 1")
+		if writeJunk(0,true) && writeJunk(1,true)
+			writeLine("Shoudl be two trues")
+		else 
+			writeLine("FAILS2")
+
+		writeLine("Test 2")
+		if writeJunk(0,false) && writeJunk(1,true)
+			writeLine("fails")
+		else
+			writeLine("Shoudl be one false")
+
+		writeLine("Test 3")
+		if writeJunk(0,false) || writeJunk(1,true)
+			writeLine("should be false true")
+		else
+			writeLine("FAILS")
+
+		writeLine("Test 4")
+		if writeJunk(0,true) || writeJunk(1,true)
+			writeLine("should be one true")
+		else
+			writeLine("FAILS")
+
+		writeLine("Test 5")
+		if writeJunk(0,false) || writeJunk(1,false)
+			writeLine("FAILS")
+		else
+			writeLine("should be false false")
+
+		readLine()
+		[0>>(width-1)]=>|(w)
+			grid.add(0 times (height-1)) 
+		divide(grid, 0, 0, width, height, choose_orientation(width, height))
+		display_maze(grid)
+
+	def choose_orientation(width, height)
+		if width < height
+			return HORIZONTAL
+		if height < width
+			return VERTICAL
+		if (nextRandom(2) == 0)
+			return HORIZONTAL
+		return VERTICAL
+
+	def display_maze(grid)
+		
+		setConsolePosition(0,0)
+
+		write(" " + ("_" ** ((grid[0].length() * 2) - 1)))
+		writeLine()
+		y=0
+		grid=>|(row)
+			write("|")
+			x=0
+			row=>|(cell)
+				bottom = ((y+1) >= grid.length())
+				south  = (cell == S || (bottom))
+				south2 = (x+1 < grid[y].length() && ((grid[y])[x+1] != S) || (bottom))
+				east   = ((cell ==E)|| (x+1 >= grid[y].length()))
+$				writeLine(bottom,south,south2,east)
+				
+				if south
+					write("_")
+				else
+					write(" ")
+
+
+				if east
+					write("|")
+				else 
+					if south && south2
+						write("_")
+					else
+						write(" ")
+				x=x+1
+			y=y+1
+			writeLine()
+		
+
+
+
+	def divide(grid, x, y, width, height, orientation)
+		if width < 2 || height < 2
+			return
+
+		display_maze(grid)
+		
+		if orientation==HORIZONTAL
+			wx=x+0
+			wy=y+nextRandom(height-2)
+			px=wx+nextRandom(width)
+			py=wy+0
+			dx=1
+			dy=0
+			length=width
+			dir=S
+		else
+			wx=x+nextRandom(width-2)
+			wy=y+0
+			px=wx+0
+			py=wy+nextRandom(height)
+			dx=0
+			dy=1
+			length=height
+			dir=E
+
+ 
+
+		[0>>(length-1)]=>|(acz)
+			if (wx != px) || (wy != py)
+				if (wy<height && (wx<width))
+					(grid[wy])[wx] = dir 
+			wx =wx+ dx
+			wy=wy+ dy
+		
+		nx=x
+		ny=y
+		if orientation==HORIZONTAL
+			w=width
+			h=(wy-y)+1
+		else
+			w=(wx-x)+1
+			h=height
+		
+
+		divide(grid, nx, ny, w, h, choose_orientation(w, h))
+
+		if orientation==HORIZONTAL
+			nx=x
+			ny=wy+1
+			w=width
+			h=y+((height-wy)-1)
+		else
+			nx=wx+1
+			ny=y
+			w=x+((width-wx)-1)
+			h=height
+ 
+		divide(grid, nx, ny, w, h, choose_orientation(w, h))
+	end

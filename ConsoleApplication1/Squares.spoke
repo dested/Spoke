@@ -1,0 +1,12 @@
+﻿
+class Main 
+	def ()
+	
+	def click(clickStuff)
+
+	def recieveMessage(messageInfo)
+
+	def draw(canvas)
+
+	def update()
+	

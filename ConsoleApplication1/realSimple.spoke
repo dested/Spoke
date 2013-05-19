@@ -1,0 +1,118 @@
+﻿macro ;[&>>&];=>|(a333,v333)
+	(a333<=v333)=>
+		yield a333
+		a333=a333+1
+		
+macro ;&?&:&;=>|(con,l1,l2)
+	if con
+		write("FAILS2")
+		return l1
+	else
+		write("FAILS2")
+		return l2
+	write("FAILS")
+ 
+class Main
+	
+	Ace=12
+	def ()
+
+		indes=0
+		fd=(true)=>
+			if indes==5
+				return indes
+			else
+				writeLine(indes)
+				indes=indes+1
+		
+		writeLine(fd)
+
+		[4>>10]=>|(dem)
+			writeLine(dem,"4 through 10")
+
+		writeLine(true?"hi":"fail")
+		writeLine(false?"fail":"hi")
+		
+		im=0
+		d=(im<10)=>
+			yield im
+			im=im+1
+		writeLine(d.length(),10)
+
+
+		size=15*20
+
+		defr=create abcde()
+		datet=create DateTime()
+		
+		feve=[]
+
+		feve.add(12)
+		feve.add(15)
+		feve.add(2001)
+
+		duece=size+Ace
+		
+
+		writeLine(arbia(duece)+defr.make(),1348)
+		
+		cec=[{a=4},{a=10}]
+		writeLine(cec[0].a+10,14)
+
+		writeLine(cec[1].a+10,20)
+
+		cec[1]={a=22}
+		writeLine(cec[1].a+10,32)
+
+		writeLine(feve.length())
+
+		writeLine("--")
+		(feve)=>|(abc)
+			writeLine(abc)
+		writeLine("--")
+		
+		writeLine("---")
+		a=0
+		(a<10)=>|(abc)
+			write(a)
+			a=a+1
+		writeLine("---")
+		
+
+
+		if 4>5
+			writeLine("No","No")
+		else
+			writeLine("Yes","Yes")
+
+		if 4<5
+			writeLine("Yes","Yes")
+		else
+			writeLine("No","No")
+
+		if 4<5
+			writeLine("okay")
+		writeLine("okay")
+
+		if 4>5
+			writeLine("FUCKFACE")
+		writeLine("okay2")
+
+		writeLine(foo(20))
+
+	def arbia(ac)
+		return ac+23
+
+	def foo(ace)
+		if ace<=2
+			return 1
+		return foo(ace-1)+ foo(ace-2)
+
+
+class abcde
+	foos=40
+	def ()
+		foos=foos-30
+
+	def make()
+		return foos+1003

@@ -1,0 +1,98 @@
+﻿macro ;&<&>;=>|(items,expressionc)
+	items=>|(_abb)
+		if expressionc(_abb)
+			return _abb
+
+macro ;&>>&;=>|(a333,v333)
+	(a333<=v333)=>
+		yield a333
+		a333=a333+1
+
+macro ;&{&};=>|(items1,expression)
+	items1=>|(_ff)
+		if expression(_ff)
+			yield return _ff
+
+
+macro ;&++;=>|(ref index)
+	cf=index
+	index=index+1
+	return cf-1
+
+macro ;&+=&;=>|(ref ba,gi)
+	fjf=ba
+	ba=ba+gi
+	return fjf
+
+macro ;&--;=>|(ref index)
+	f=index
+	index=index-1
+	return f
+  
+
+	
+macro ;&-=&;=>|(ref index,v)
+	index=index-v
+	return index
+
+
+macro ;&**&;=>|(str,num)
+	a=0
+	strb=""
+	(a<=num)=>
+		strb=strb+str
+		a=a+1
+	return strb
+
+
+macro ;&?&:&;=>|(con,l1,l2)
+	if con
+		return l1
+	else
+		return l2
+
+
+macro ;>>&;=>|(con)
+	write(con)
+
+macro ;can you believe that this is equal to 42? what that fuck right?;=>|()
+	return 42
+
+
+ 
+class Main
+	def ()
+		
+		
+		write("1l")
+
+		Size=can you believe that this is equal to 42? what that fuck right?*20
+		ArrayOfNumbers=[2>>Size]
+				
+		write("2l")
+		PrimeNumbers=[]
+		ArrayOfNumbers=>|(number)
+			PrimeNumbers.add({intb=number,prime=true})
+
+		write("3l")
+			
+		PrimeNumbers=>|(m)
+$			write("4l")
+			ArrayOfNumbers=>|(number)
+$				write("5l")
+				cd=m.intb*number
+				if m.prime==true && cd<=Size
+$					write("6l")
+					PrimeNumbers=>|(c)
+$						write("7l")
+						if c.intb==cd
+$							write("8l")
+							c.prime=false
+		
+		>>"|"
+
+		PrimeNumbers=>|(m)
+			if m.prime
+				>>m.intb+"|"
+
+				 

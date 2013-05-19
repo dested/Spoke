@@ -1,0 +1,50 @@
+﻿macro ;& times &;=>|(con,don)
+	return con*don
+macro ;& minus &;=>|(con,don)
+	return con-don
+macro ;& plus &;=>|(con,don)
+	return con+don
+macro ;& divided by &;=>|(con,don)
+	return con/don
+
+
+macro ;is & equal to &?;=>|(a,b)
+	return a==b
+
+macro ;Yes;=>|()
+	return true
+macro ;No;=>|()
+	return false
+
+macro ;&++;=>|(ref a)
+	f=a
+	a=a+1
+	return f
+
+macro ;&+=&;=>|(g,ref a)
+	a=a+g
+	return a
+
+macro ;++&;=>|(ref a)
+	a=a+1
+	return a
+
+
+
+
+class Main 
+	def ()
+		i=0
+$		debug(i)
+		writeLine(i++,0)
+		writeLine(i++,1)
+		writeLine(5+=i,7)
+		writeLine(i,7)
+
+		writeLine(is 4*5 equal to 5*4?,Yes)
+	
+		writeLine(9 times 25,9*25)
+		writeLine(9 plus 25,9+25)
+		writeLine(25 divided by 5,25/5)
+		writeLine(9 minus 25,9-25)
+		

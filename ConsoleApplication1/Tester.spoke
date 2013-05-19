@@ -1,0 +1,121 @@
+﻿macro ;[&>>&];=>|(aff,v)
+	(aff<=v)=>
+		yield aff
+		aff=aff+1
+
+
+class Main
+
+    def gf(c)
+        return c.am+c.b+c.M+2
+    def ()
+
+		ced={d=3,f=5}
+		fed=ced.d
+
+	    rm=create Monkey()
+		writeLine(rm.am,"15")
+		writeLine(rm.b,"10")
+		writeLine(rm.M,"3")
+        writeLine(gf(rm),"30")
+
+
+		writeLine("fib:")
+        f=[1>>10]
+        f=>|(a)
+            writeLine(a,foo(a))
+
+		bd=15
+        writeLine(bd,(|(adr)=>
+            if adr<1 
+                return adr
+            return foo(adr-1) + foo(adr-2)
+		)(bd),foo(bd))
+
+
+		grb=|(adr)=>
+			if adr<1 
+                return adr
+            return foo(adr-1) + foo(adr-2)
+
+		writeLine("newStuffs")
+		
+		de=grb
+
+		arbd=f=>de
+$		debug(arbd)
+		arbd=>|(a)
+			writeLine(a,"fib a")
+
+
+		writeLine("Hell3ow")
+		f=>|(ad)
+			writeLine(grb(ad))
+
+		        
+		writeLine("Hell3o")
+
+
+
+		gr=f=>|(_)
+			if _>3
+				yield _
+				
+		gre=f=>|(_)
+			if _==3
+				return _
+
+		writeLine(gr[0],"4")
+		writeLine(gre,"3")
+		writeLine("Hello")
+
+
+
+$        gr=f<_=2>
+$        gb=f{_>=2}
+$        c={gb}
+        arb=0
+
+		arbf=4*3
+		writeLine("Printing",arbf,"numbers")
+
+
+        (arb<arbf)=>
+            arb=arb+1
+			writeLine(arb,"nums")
+        b={am=45,b=2,M=5}
+        b.am=3 
+$		debug(b)
+        writeLine(gf(b),"12")
+		writeLine(rm.mooTools(15),"30")
+
+
+
+		arbi=|(vm,dm)=>
+			(vm<dm)=>
+				yield vm
+				vm=vm+1
+
+
+		arbi(1,15)=>|(im)
+			writeLine(im)
+
+
+
+    def foo(ac)
+        if ac<2
+            return 1
+		return foo(ac-1)+ foo(ac-2)
+
+class Monkey
+    M=0
+    am=1
+    b=5+5
+    def ()
+        am=0
+        (am<15)=>
+			am=am+1
+        M=3
+
+    def mooTools(abba)
+		return abba+015

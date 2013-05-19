@@ -1,0 +1,31 @@
+﻿macro ;[&>>&];=>|(aff,v)
+	(aff<=v)=>
+		yield aff
+		aff=aff+1
+
+
+class Main 
+	def () 
+		cj=0
+		cm=[]
+		(cj<100)=>
+			cm.add(cj)
+			cj=cj+1
+
+		a=4
+		b=a+4
+		c=b+12
+		d=(a+b)+c
+		
+		[1>>25]=>|(ea)
+			writeLine(foo(ea))
+
+		writeLine("asd")
+
+    def foo(ac)
+		if ac<2
+			return 1
+
+		return foo(ac-1)+ foo(ac-2)
+
+		
